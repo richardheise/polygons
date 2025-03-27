@@ -2,7 +2,7 @@
  *
  * Autor: Richard Fernando Heise Ferreira
  * Matrícula: 201900121214
- * Data: 11/2024
+ * Data: 03/2025
  * Instituição: Universidade Federal do Paraná
  * Curso: Mestrado em Segurança da Computação - PPG-Inf
  * Motivo: Trabalho da disciplina de Geometria Computacional
@@ -36,14 +36,16 @@ public:
     }
 };
 
-// Definindo a classe Polygon para representar um polígono
+// Definição da classe Polygon
 class Polygon {
 private:
     vector<Dot> vertices; // Vetor de pontos (vértices) do polígono
+    bool isSimple;        // Propriedade para indicar se o polígono é simples
+    bool isConvex;        // Propriedade para indicar se o polígono é convexo
 
 public:
     // Construtor padrão
-    Polygon() {}
+    Polygon() : isSimple(true), isConvex(true) {}
 
     // Método para adicionar um vértice ao polígono
     void addVertex(const Dot& vertex) {
@@ -63,12 +65,34 @@ public:
         throw out_of_range("Índice fora do intervalo");
     }
 
+    // Método para definir se o polígono é simples
+    void setSimple(bool simple) {
+        isSimple = simple;
+    }
+
+    // Método para verificar se o polígono é simples
+    bool getSimple() const {
+        return isSimple;
+    }
+
+    // Método para definir se o polígono é convexo
+    void setConvex(bool convex) {
+        isConvex = convex;
+    }
+
+    // Método para verificar se o polígono é convexo
+    bool getConvex() const {
+        return isConvex;
+    }
+
     // Método para escrever na saída padrão um polígono
     void printPolygon() const {
         cout << "Polígono: " << endl;
         for (const auto& dot : vertices) {
             dot.printDot();
         }
+        cout << (isSimple ? "Simples" : "Complexo") << endl;
+        cout << (isConvex ? "Convexo" : "Não-convexo") << endl;
     }
 };
 
