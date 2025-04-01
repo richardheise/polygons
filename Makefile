@@ -6,7 +6,7 @@ CXXFLAGS = -Wall -Wextra
 SRC = main.cpp polygons.cpp
 OBJ = main.o polygons.o
 HEADER = polygons.hpp
-EXE = app
+EXE = poligonos
 
 # Regra principal
 $(EXE): $(OBJ)

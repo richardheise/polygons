@@ -8,7 +8,7 @@
  * Motivo: Trabalho da disciplina de Geometria Computacional
  *
  ************************************************************************/
-#include "polygons.cpp"
+#include "polygons.hpp"
 
 // Função para verificar se a flag -v foi passada como argumento
 bool isVerbose(int argc, char *argv[]) {
@@ -87,5 +87,6 @@ int main(int argc, char *argv[]) {
     convexCheck(polygon);
   }
 
+  printPolygons(polygons);
   return 0;
 }
