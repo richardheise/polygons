@@ -1,36 +1,25 @@
-# Compilador
+# Definindo variáveis
 CXX = g++
-
-# Opções de compilação
 CXXFLAGS = -Wall -Wextra
 
-# Nome do executável
-TARGET = main
+# Arquivos de entrada
+SRC = main.cpp polygons.cpp
+OBJ = main.o polygons.o
+HEADER = polygons.hpp
+EXE = app
 
-# Arquivos fonte
-SRCS = main.cpp polygons.cpp
+# Regra principal
+$(EXE): $(OBJ)
+	$(CXX) $(OBJ) -o $(EXE)
 
-# Arquivos objeto (gerados a partir dos arquivos fonte)
-OBJS = $(SRCS:.cpp=.o)
 
-# Regra padrão (alvo principal)
-all: $(TARGET)
+polygons.o: polygons.cpp $(HEADER)
+	$(CXX) $(CXXFLAGS) -c polygons.cpp
 
-# Regra para compilar o executável
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+# Regras de compilação dos arquivos .cpp
+main.o: main.cpp $(HEADER)
+	$(CXX) $(CXXFLAGS) -c main.cpp
 
-# Regra para compilar arquivos .cpp em arquivos .o
-%.o: %.cpp polygons.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Regra para limpar os arquivos gerados
+# Limpeza dos arquivos intermediários
 clean:
-	rm -f $(OBJS) $(TARGET)
-
-# Regra para rodar o programa
-run: $(TARGET)
-	./$(TARGET)
-
-# Indica que "clean" e "run" não são arquivos
-.PHONY: clean run
+	rm -f $(OBJ) $(EXE)
