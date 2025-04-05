@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra
 
-# Arquivos de entrada
+# Arquivos principais
 SRC = main.cpp polygons.cpp
 OBJ = main.o polygons.o
 HEADER = polygons.hpp
@@ -12,14 +12,13 @@ EXE = poligonos
 $(EXE): $(OBJ)
 	$(CXX) $(OBJ) -o $(EXE)
 
-
+# Compilação de objetos
 polygons.o: polygons.cpp $(HEADER)
 	$(CXX) $(CXXFLAGS) -c polygons.cpp
 
-# Regras de compilação dos arquivos .cpp
 main.o: main.cpp $(HEADER)
 	$(CXX) $(CXXFLAGS) -c main.cpp
 
-# Limpeza dos arquivos intermediários
+# Limpeza
 clean:
-	rm -f $(OBJ) $(EXE)
+	rm -f $(OBJ) $(EXE) $(GENERATOR_EXE)

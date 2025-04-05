@@ -22,6 +22,7 @@ using namespace std;
 class Dot {
 public:
   int x, y;
+  vector<int> owners;
 
   // Construtor padrão
   Dot() : x(0), y(0) {}
@@ -30,7 +31,13 @@ public:
   Dot(int x, int y) : x(x), y(y) {}
 
   // Meto para escrever na saida padrão um ponto
-  void printDot() const { cout << "Ponto: (" << x << "," << y << ")" << endl; }
+  void printDot() const {
+    cout << "Ponto: (" << x << "," << y << ")" << endl << "Owners: " << endl;
+    for (const auto &owner : owners) {
+      cout << owner << " ";
+    }
+    cout << endl;
+  }
 };
 
 // Definição da classe Polygon
@@ -85,5 +92,11 @@ void printPolygons(const vector<Polygon> &polygons);
 void printDots(const vector<Dot> &dots);
 double crossProduct(const Dot &p1, const Dot &p2, const Dot &p3);
 void convexCheck(Polygon &polygon);
+void simpleCheck(Polygon &polygon, size_t index);
+bool intersectionCheck(const Dot &p1, const Dot &p2, const Dot &p3,
+                       const Dot &p4);
+bool checkInside(Polygon &polygon, const Dot &p);
+bool isOnSegment(const Dot &a, const Dot &b, const Dot &p);
+void addOwner(vector<Polygon> &Polygons, vector<Dot> &points);
 
 #endif // __POLIGONS_H__

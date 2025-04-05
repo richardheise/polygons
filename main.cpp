@@ -87,6 +87,10 @@ int main(int argc, char *argv[]) {
     convexCheck(polygon);
   }
 
+  addOwner(polygons, dots);
+
   printPolygons(polygons);
+  printDots(dots);
+
   return 0;
 }
