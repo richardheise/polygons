@@ -18,6 +18,8 @@
 
 using namespace std;
 
+// ------------------------------------------------------------------------------ //
+
 // Definindo a classe Dot para representar um ponto (x, y)
 class Dot {
 public:
@@ -39,6 +41,8 @@ public:
     cout << endl;
   }
 };
+
+// ------------------------------------------------------------------------------ //
 
 // Definição da classe Polygon
 class Polygon {
@@ -88,15 +92,21 @@ public:
   }
 };
 
+// ------------------------------------------------------------------------------ //
+
 void printPolygons(const vector<Polygon> &polygons);
 void printDots(const vector<Dot> &dots);
 double crossProduct(const Dot &p1, const Dot &p2, const Dot &p3);
 void convexCheck(Polygon &polygon);
 void simpleCheck(Polygon &polygon, size_t index);
-bool intersectionCheck(const Dot &p1, const Dot &p2, const Dot &p3,
-                       const Dot &p4);
+
+// Checa a intersecção entre duas retas, definidas por 4 pontos
+bool intersectionCheck(const Dot &p1, const Dot &p2, const Dot &p3, const Dot &p4);
+
+// Checa se um ponto está dentro de um polígono ou não
 bool checkInside(Polygon &polygon, const Dot &p);
+
+// Checa se um ponto p está sobre um segmento definido por a e b
 bool isOnSegment(const Dot &a, const Dot &b, const Dot &p);
-void addOwner(vector<Polygon> &Polygons, vector<Dot> &points);
 
 #endif // __POLIGONS_H__

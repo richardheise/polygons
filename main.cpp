@@ -10,6 +10,8 @@
  ************************************************************************/
 #include "polygons.hpp"
 
+// ------------------------------------------------------------------------------ //
+
 // Função para verificar se a flag -v foi passada como argumento
 bool isVerbose(int argc, char *argv[]) {
   for (int i = 1; i < argc; i++) {
@@ -19,6 +21,8 @@ bool isVerbose(int argc, char *argv[]) {
   }
   return false;
 }
+
+// ------------------------------------------------------------------------------ //
 
 // Função para ler os polígonos
 vector<Polygon> readPolygons(uint m, bool verbose) {
@@ -48,6 +52,8 @@ vector<Polygon> readPolygons(uint m, bool verbose) {
   return polygons;
 }
 
+// ------------------------------------------------------------------------------ //
+
 // Função para ler os pontos
 vector<Dot> readDots(uint n, bool verbose) {
   vector<Dot> dots(n);
@@ -65,6 +71,8 @@ vector<Dot> readDots(uint n, bool verbose) {
 
   return dots;
 }
+
+// ------------------------------------------------------------------------------ //
 
 int main(int argc, char *argv[]) {
   // Verifica se a flag -v foi passada
@@ -87,10 +95,51 @@ int main(int argc, char *argv[]) {
     convexCheck(polygon);
   }
 
-  addOwner(polygons, dots);
+  size_t i = 0;
+  for (auto &poly : polygons) {
+    i += 1;
+    for (auto &point : dots) {
+      if (checkInside(poly, point)) {
+        point.owners.push_back(i);
+      }
+    }
+  }
 
-  printPolygons(polygons);
-  printDots(dots);
+  if (verbose) {
+    printPolygons(polygons);
+    printDots(dots);
+  }
+
+  i = 0;
+  for (auto &poly : polygons) {
+    i += 1;
+    cout << i << " ";
+    if (!poly.getSimple()) {
+      cout << "nao simples" << endl;
+      continue;
+    }
+
+    cout << "simples e ";
+
+    if (!poly.getConvex()) {
+      cout << "nao convexo" << endl;
+      continue;
+    }
+
+    cout << "convexo" << endl;
+  }
+  
+  i = 0;
+  for (auto &point : dots) {
+    i += 1;
+    cout << i << ":";
+
+    for (const auto& owner : point.owners) {
+      cout << owner << " ";
+    }
+
+    cout << endl;
+  }
 
   return 0;
 }

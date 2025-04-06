@@ -10,6 +10,8 @@
  ************************************************************************/
 #include "polygons.hpp"
 
+// ------------------------------------------------------------------------------ //
+
 // Função para imprimir os polígonos
 void printPolygons(const vector<Polygon> &polygons) {
   cout << endl << "Printando polígonos lidos: " << endl;
@@ -17,6 +19,8 @@ void printPolygons(const vector<Polygon> &polygons) {
     polygon.printPolygon();
   }
 }
+
+// ------------------------------------------------------------------------------ //
 
 // Função para imprimir os pontos
 void printDots(const vector<Dot> &dots) {
@@ -26,9 +30,13 @@ void printDots(const vector<Dot> &dots) {
   }
 }
 
+// ------------------------------------------------------------------------------ //
+
 double crossProduct(const Dot &p1, const Dot &p2, const Dot &p3) {
   return (p2.x - p1.x) * (p3.y - p2.y) - (p2.y - p1.y) * (p3.x - p2.x);
 }
+
+// ------------------------------------------------------------------------------ //
 
 void convexCheck(Polygon &polygon) {
   size_t size = polygon.getNumVertices();
@@ -58,6 +66,8 @@ void convexCheck(Polygon &polygon) {
   }
 }
 
+// ------------------------------------------------------------------------------ //
+
 bool intersectionCheck(const Dot &p1, const Dot &p2, const Dot &p3,
                        const Dot &p4) {
   int o1 = (crossProduct(p1, p2, p3) > 0)
@@ -76,6 +86,8 @@ bool intersectionCheck(const Dot &p1, const Dot &p2, const Dot &p3,
   return (o1 != o2 && o3 != o4);
 }
 
+// ------------------------------------------------------------------------------ //
+
 void simpleCheck(Polygon &polygon, size_t index) {
   size_t size = polygon.getNumVertices();
   for (size_t i = index; (i + 1) % size != index; i = (i + 1) % size) {
@@ -93,13 +105,17 @@ void simpleCheck(Polygon &polygon, size_t index) {
   }
 }
 
+// ------------------------------------------------------------------------------ //
+
 bool isOnSegment(const Dot &a, const Dot &b, const Dot &p) {
   // Verifica se p está no segmento ab
-  return (std::min(a.x, b.x) <= p.x && p.x <= std::max(a.x, b.x)) &&
-         (std::min(a.y, b.y) <= p.y && p.y <= std::max(a.y, b.y)) &&
+  return (min(a.x, b.x) <= p.x && p.x <= max(a.x, b.x)) &&
+         (min(a.y, b.y) <= p.y && p.y <= max(a.y, b.y)) &&
          ((b.x - a.x) * (p.y - a.y) ==
           (p.x - a.x) * (b.y - a.y)); // Produto vetorial == 0
 }
+
+// ------------------------------------------------------------------------------ //
 
 bool checkInside(Polygon &polygon, const Dot &p) {
   size_t size = polygon.getNumVertices();
@@ -121,7 +137,7 @@ bool checkInside(Polygon &polygon, const Dot &p) {
 
     // Teste do raio (ray casting)
     if ((vi.y > p.y) != (vj.y > p.y)) {
-      double intersectX = (vj.x - vi.x) * (p.y - vi.y) / (vj.y - vi.y) + vi.x;
+      double intersectX = (vj.x - vi.x) * (p.y - vi.y) / (double)(vj.y - vi.y) + vi.x;
       if (p.x < intersectX) {
         inside = !inside;
       }
@@ -129,16 +145,4 @@ bool checkInside(Polygon &polygon, const Dot &p) {
   }
 
   return inside;
-}
-
-void addOwner(vector<Polygon> &Polygons, vector<Dot> &points) {
-  size_t i = 0;
-  for (auto &poly : Polygons) {
-    i += 1;
-    for (auto &point : points) {
-      if (checkInside(poly, point)) {
-        point.owners.push_back(i);
-      }
-    }
-  }
 }
