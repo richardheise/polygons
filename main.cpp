@@ -10,7 +10,8 @@
  ************************************************************************/
 #include "polygons.hpp"
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 // Função para verificar se a flag -v foi passada como argumento
 bool isVerbose(int argc, char *argv[]) {
@@ -22,7 +23,8 @@ bool isVerbose(int argc, char *argv[]) {
   return false;
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 // Função para ler os polígonos
 vector<Polygon> readPolygons(uint m, bool verbose) {
@@ -52,7 +54,8 @@ vector<Polygon> readPolygons(uint m, bool verbose) {
   return polygons;
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 // Função para ler os pontos
 vector<Dot> readDots(uint n, bool verbose) {
@@ -72,7 +75,8 @@ vector<Dot> readDots(uint n, bool verbose) {
   return dots;
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 int main(int argc, char *argv[]) {
   // Verifica se a flag -v foi passada
@@ -92,14 +96,24 @@ int main(int argc, char *argv[]) {
   vector<Dot> dots = readDots(n, verbose);
 
   for (auto &polygon : polygons) {
+    simpleCheck(polygon);
+  }
+
+  for (auto &polygon : polygons) {
+    if (!polygon.getSimple())
+      continue; // pula poligonos nao simples
+      
     convexCheck(polygon);
   }
 
   size_t i = 0;
   for (auto &poly : polygons) {
+    if (!poly.getSimple())
+      continue; // pula poligonos nao simples
+
     i += 1;
     for (auto &point : dots) {
-      if (checkInside(poly, point)) {
+      if (insideCheck(poly, point)) {
         point.owners.push_back(i);
       }
     }
@@ -128,14 +142,14 @@ int main(int argc, char *argv[]) {
 
     cout << "convexo" << endl;
   }
-  
+
   i = 0;
   for (auto &point : dots) {
     i += 1;
     cout << i << ":";
 
-    for (const auto& owner : point.owners) {
-      cout << owner << " ";
+    for (const auto &owner : point.owners) {
+      cout << owner+1 << " ";
     }
 
     cout << endl;

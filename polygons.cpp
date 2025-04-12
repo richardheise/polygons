@@ -10,7 +10,8 @@
  ************************************************************************/
 #include "polygons.hpp"
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 // Função para imprimir os polígonos
 void printPolygons(const vector<Polygon> &polygons) {
@@ -20,7 +21,8 @@ void printPolygons(const vector<Polygon> &polygons) {
   }
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 // Função para imprimir os pontos
 void printDots(const vector<Dot> &dots) {
@@ -30,20 +32,21 @@ void printDots(const vector<Dot> &dots) {
   }
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 double crossProduct(const Dot &p1, const Dot &p2, const Dot &p3) {
   return (p2.x - p1.x) * (p3.y - p2.y) - (p2.y - p1.y) * (p3.x - p2.x);
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 void convexCheck(Polygon &polygon) {
   size_t size = polygon.getNumVertices();
 
   if (size < 3) {
     polygon.setConvex(false);
-    polygon.setSimple(false);
     return;
   }
 
@@ -60,13 +63,13 @@ void convexCheck(Polygon &polygon) {
       sign = currentSign;
     } else if (sign != currentSign) { // Se mudar de sinal, o polígono é côncavo
       polygon.setConvex(false);
-      simpleCheck(polygon, i);
       return;
     }
   }
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 bool intersectionCheck(const Dot &p1, const Dot &p2, const Dot &p3,
                        const Dot &p4) {
@@ -86,18 +89,34 @@ bool intersectionCheck(const Dot &p1, const Dot &p2, const Dot &p3,
   return (o1 != o2 && o3 != o4);
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
-void simpleCheck(Polygon &polygon, size_t index) {
+void simpleCheck(Polygon &polygon) {
   size_t size = polygon.getNumVertices();
-  for (size_t i = index; (i + 1) % size != index; i = (i + 1) % size) {
-    for (size_t j = (i + 2) % size; (j + 1) % size != index && j != index;
-         j = (j + 1) % size) {
-      if ((i == 0 && j == size - 1) || (j == (i + 1) % size))
+
+  if (size < 3) {
+    polygon.setSimple(false);
+    return;
+  }
+
+  for (size_t i = 0; i < size; i++) {
+    Dot a1 = polygon.getVertex(i);
+    Dot a2 = polygon.getVertex((i + 1) % size);
+
+    for (size_t j = i + 1; j < size; j++) {
+      // Pega próxima aresta (b1, b2), evitando vizinhas
+      size_t j1 = j % size;
+      size_t j2 = (j + 1) % size;
+
+      // Evita contabilizar arestas subsequentes como autointersecção
+      if (i == j1 || i == j2 || (i + 1) % size == j1 || (i + 1) % size == j2)
         continue;
-      if (intersectionCheck(
-              polygon.getVertex(i), polygon.getVertex((i + 1) % size),
-              polygon.getVertex(j), polygon.getVertex((j + 1) % size))) {
+
+      Dot b1 = polygon.getVertex(j1);
+      Dot b2 = polygon.getVertex(j2);
+
+      if (intersectionCheck(a1, a2, b1, b2)) {
         polygon.setSimple(false);
         return;
       }
@@ -105,7 +124,8 @@ void simpleCheck(Polygon &polygon, size_t index) {
   }
 }
 
-// ------------------------------------------------------------------------------ //
+// ------------------------------------------------------------------------------
+// //
 
 bool isOnSegment(const Dot &a, const Dot &b, const Dot &p) {
   // Verifica se p está no segmento ab
@@ -115,9 +135,9 @@ bool isOnSegment(const Dot &a, const Dot &b, const Dot &p) {
           (p.x - a.x) * (b.y - a.y)); // Produto vetorial == 0
 }
 
-// ------------------------------------------------------------------------------ //
-
-bool checkInside(Polygon &polygon, const Dot &p) {
+// ------------------------------------------------------------------------------
+// //
+bool insideCheck(Polygon &polygon, const Dot &p) {
   size_t size = polygon.getNumVertices();
   bool inside = false;
 
@@ -135,9 +155,18 @@ bool checkInside(Polygon &polygon, const Dot &p) {
       return true;
     }
 
-    // Teste do raio (ray casting)
-    if ((vi.y > p.y) != (vj.y > p.y)) {
-      double intersectX = (vj.x - vi.x) * (p.y - vi.y) / (double)(vj.y - vi.y) + vi.x;
+    // Ajusta os extremos para evitar contar vértice superior
+    int y1 = vi.y, y2 = vj.y;
+    int x1 = vi.x, x2 = vj.x;
+
+    if (y1 > y2) {
+      swap(y1, y2);
+      swap(x1, x2);
+    }
+
+    // Verifica se p.y está estritamente entre y1 e y2 (não inclui y2)
+    if (p.y > y1 && p.y <= y2) {
+      double intersectX = (double)(x2 - x1) * (p.y - y1) / (y2 - y1) + x1;
       if (p.x < intersectX) {
         inside = !inside;
       }
