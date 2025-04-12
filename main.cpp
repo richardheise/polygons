@@ -95,21 +95,24 @@ int main(int argc, char *argv[]) {
   vector<Polygon> polygons = readPolygons(m, verbose);
   vector<Dot> dots = readDots(n, verbose);
 
+  // Checagem se os polígonos são simples
   for (auto &polygon : polygons) {
     simpleCheck(polygon);
   }
 
+  // Checagem se os poligonos são convexos
   for (auto &polygon : polygons) {
     if (!polygon.getSimple())
       continue; // pula poligonos nao simples
-      
+
     convexCheck(polygon);
   }
 
+  // Checagem se os ponhtos estão dentro dos polígonos
   size_t i = 0;
   for (auto &poly : polygons) {
     i += 1;
-    
+
     if (!poly.getSimple())
       continue; // pula poligonos nao simples
 
@@ -125,6 +128,8 @@ int main(int argc, char *argv[]) {
     printDots(dots);
   }
 
+  // Printa a saída no formato especificado
+  // Polígonos
   i = 0;
   for (auto &poly : polygons) {
     i += 1;
@@ -144,6 +149,7 @@ int main(int argc, char *argv[]) {
     cout << "convexo" << endl;
   }
 
+  // Pontos
   i = 0;
   for (auto &point : dots) {
     i += 1;
