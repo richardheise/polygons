@@ -108,10 +108,11 @@ int main(int argc, char *argv[]) {
 
   size_t i = 0;
   for (auto &poly : polygons) {
+    i += 1;
+    
     if (!poly.getSimple())
       continue; // pula poligonos nao simples
 
-    i += 1;
     for (auto &point : dots) {
       if (insideCheck(poly, point)) {
         point.owners.push_back(i);
@@ -149,7 +150,7 @@ int main(int argc, char *argv[]) {
     cout << i << ":";
 
     for (const auto &owner : point.owners) {
-      cout << owner+1 << " ";
+      cout << owner << " ";
     }
 
     cout << endl;
