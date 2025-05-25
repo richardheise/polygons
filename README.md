@@ -1,4 +1,4 @@
-# Trabalho de Geometria Computacional
+# Trabalho 1 de Geometria Computacional
 
 ## Objetivo
 
